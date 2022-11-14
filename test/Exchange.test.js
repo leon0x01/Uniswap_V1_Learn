@@ -31,3 +31,28 @@ describe("Exchange", ()=> {
 it("is deployed", async () => {
     expect(await exchange.deployed())
 });
+
+describe("addLiquidity", async() => {
+    it("adds liquidity", async() => {
+        await token.approve(exchange.address , toWei(200));
+        await exchange.addLiquidity(toWei(200), { value: toWei(100) });
+        expect(await getBalance(exchange.address)).to.equal(toWei(100));
+        expect(await exchange.getReserve()).to.equal(toWei(200));
+    });
+});
+
+describe("getPrice", async() => {
+    it("returns correct prices", async() => {
+        await token.approve(exchange.address, toWei(2000));
+        await exchange.addLiquidity(toWei(2000), { value: toWei(1000)});
+        const tokenReserve = await exchange.getReserve();
+        const etherReserve = await getBalance(exchange.address);
+        // Eth per token
+
+        expect(
+            (await exchange.getPrice(etherReserve, tokenReserve)).toString()
+        ).to.eq("0.5");
+        // token per Eth
+        expect(await exchange.getPrice(tokenReserve, etherReserve)).to.eq(2);
+    });
+});
