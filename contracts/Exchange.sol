@@ -19,7 +19,7 @@ contract Exchange{
 
     // adding a helper function that returns token balance of an exchange:
     function getReserve() public view returns (uint256){
-        return IERC20(tokenAddress).balanceOf(addres(this));
+        return IERC20(tokenAddress).balanceOf(address(this));
     }
     
     function getPrice(uint256 inputReserve, uint256 outputReserve)
