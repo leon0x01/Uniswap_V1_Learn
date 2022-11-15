@@ -27,3 +27,17 @@ https://www.youtube.com/watch?v=Af3NxB7r-Ws
 Constant product market maker
 
 Automated market maker is a general term that embraces different decentralized market maker algorithms. The most popular ones (and those that gave birth to the term) are related to prediction markets - markets that allow to make profit on predictions. Uniswap and other on-chain exchanges are a continuation of those algorithms.
+
+
+### Correct Pricing Function
+
+As we know that Uniswap is a constant product market amker, which means it's based on a constant product formula: X*Y = K
+
+Does this formula produce a better pricing function ? Let's see
+
+The formula states that K remains constant no matter what reserves X and Y are. Every trade increases a reserve of either ether or token and decreases a reserve of either token or ether - let's put that logic in a formula:
+
+(x + delta x)(y - Delta y) = xy
+
+where delta x is the amount of ethers or tokens we're trading for Delta y and amount of tokens or ethers we're getting in exchange. Having this formula we can find Delta Y from above equation
+
