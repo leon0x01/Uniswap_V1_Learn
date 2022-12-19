@@ -20,7 +20,13 @@ Basically, Uniswap is based on an algorithm that allows to make pools, or token 
 
 Let's look what is automated market maker
 
-Market makers are entities that provider liquidity (trading assets) to markets. Liquidity is what makes trades possible: if you want to sell soemthing but no one is buying it, there won't be a trade. Some trading pairs have high liquidity(eg: BTC-USDT), but some have low or no liquidity at all (like scammy or shady altcoins).
+Market makers are entities that provider liquidity (trading assets) to markets. Liquidity is what makes trades possible: if you want to sell something but no one is buying it, there won't be a trade. Some trading pairs have high liquidity(eg: BTC-USDT), but some have low or no liquidity at all (like scammy or shady altcoins).
+
+Automated market maker is a type of DEX protocol that relies on a mathematical formula to price assets. Instead of using an order book like a traditional exchange, assets are priced according to a pricing algorithm.
+
+This formula can vary with each protocol. For example, Uniswap uses x*y = k, where x is the ammount on on token in the liquidity pool, and y is the amount of the other. In this formula, k is a fixed constant, meaning the pool's total liquidity always has to remain the same. Other AMMs will use other formulas for the specific use cases they target. 
+
+In Traditional market making usually works with firms with vast resources and complex strategies. Market makers help you get a good price and tight bid-ask spread on an order book exchange like Binance. AMM decentralized this process and let essentially anyone create a market on a blockchain. How exactly can they do that? Let's read on.
 
 https://www.youtube.com/watch?v=Af3NxB7r-Ws
 
@@ -31,7 +37,7 @@ Automated market maker is a general term that embraces different decentralized m
 
 ### Correct Pricing Function
 
-As we know that Uniswap is a constant product market amker, which means it's based on a constant product formula: X*Y = K
+As we know that Uniswap is a constant product market maker, which means it's based on a constant product formula: X*Y = K
 
 Does this formula produce a better pricing function ? Let's see
 
