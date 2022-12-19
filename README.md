@@ -29,6 +29,7 @@ This formula can vary with each protocol. For example, Uniswap uses x*y = k, whe
 In Traditional market making usually works with firms with vast resources and complex strategies. Market makers help you get a good price and tight bid-ask spread on an order book exchange like Binance. AMM decentralized this process and let essentially anyone create a market on a blockchain. How exactly can they do that? Let's read on.
 
 https://www.youtube.com/watch?v=Af3NxB7r-Ws
+https://www.youtube.com/watch?v=Ui1TBPdnEJU
 
 Constant product market maker
 
