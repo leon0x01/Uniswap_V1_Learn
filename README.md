@@ -73,3 +73,31 @@ LP-tokens are basically ERC20 tokens issued to liquidity providers in exchange f
 Imagine if we issues alot of tokens, suppose 1 billion and distribute them to all of the liquidity providers in pool. Suppose if we distribute all the tokens at first liquidity provider gets 1 Billion token, and second one gets a share of it, etc). we are forced to recalculate issued shares, which is expensive. If we distribute only a portion of the tokens initially, then we're risking hitting the supply limit,
 
 The only good solution seems to not have supply limit at all and mint new tokens when new liquidity is added. This allows infinte growth and, if we use a proper formula, all issued shares will remain correct ( will scale proportionally) wehn liqudity is added or removed. Luckily, inflation doesn't reduce value of LP-tokens because they're always backed by some amount of liquidity tht doesn't depend on the number of issued tokens.
+
+Now, So how to calculated the amount of minted LP-tokens when liquidity is deposited?
+
+The Exchange contract stores reserves of ether and token. so how do we calculated the amount of minted LP-tokens from reserves of both ether and token? or only one of them? OR Both? 
+
+Uniswap V1 calculated the amount proportionally to the ether reserve, but Uniswap V2 allows only swpas between tokens (not between ether and token), so it's not clear how to choose between them. Let's stick to what Uniswap V1 does and later we'll see how to solve this problem when there are two ERC20 tokens.
+
+
+The following equation shows how the amount of new LP-tokens is calculated depending on the amount of ethers deposited:
+
+To calculate the amount of new LP tokens that will be created, you will need to know the following information:
+
+    The amount of cryptocurrency that is being contributed to the liquidity pool: This is known as the "deposit amount."
+
+    The current market value of the cryptocurrency being deposited: This is known as the "deposit value."
+
+    The total amount of liquidity currently in the pool: This is known as the "pool size."
+
+With this information, you can use the following formula to calculate the number of new LP tokens that will be created:
+
+    New LP tokens = (Deposit Amount / Deposit Value) * Pool Size
+
+    amountMinted =  (EthDeposited / EthReserve) * totalAmount
+
+For example, if you deposit 1,000 units of cryptocurrency with a market value of $10 per unit, and the total pool size is currently 100,000 units, the number of new LP tokens you will receive will be:
+
+    New LP tokens = (1,000 / 10) * 100,000 = 10,000
+
