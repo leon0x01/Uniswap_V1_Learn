@@ -5,9 +5,9 @@ pragma solidity ^0.8.0;
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 // since every exchange allows swaps with only onetoken, we need to connect
 // Exchange with a token address:
-contract Exchange{
+contract Exchange is ERC20{
     address public tokenAddress;
-    constructor(address _token){
+    constructor(address _token) ERC20("ChamroSwap-v1", "Chamro-v1"){
         require(_token != address(0), "invalid token address");
         tokenAddress  = _token;
     }
