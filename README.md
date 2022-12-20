@@ -48,3 +48,28 @@ The formula states that K remains constant no matter what reserves X and Y are. 
 
 where delta x is the amount of ethers or tokens we're trading for Delta y and amount of tokens or ethers we're getting in exchange. Having this formula we can find Delta Y from above equation
 
+## LP-Tokens
+
+LP-tokens is a crucial part of the Uniswap design. There need to have a way to reward liquidity providers for their tokens. If they're not incentivized, they won't provide liquidity because no one would put their tokens in a third-party contract for nothing.
+
+The only good way to incentivized the liquidity providers is to collect a small fee on each token swap and distribute accumulated fees among the liquidity providers. This also seems pretty much fair: users (traders) pay for services (liquidity) providerd by other people.
+
+For rewards to be fair, we need to reward liquidity providers proportionally to their contribution, i.e. the amount of liquidity they provide. IF someone has 50% of pool liquidity, they should get 50% of accumulated fees.
+
+Now, the task seems pretty complicated. However, there's an elegant solution: LP-tokens.
+
+LP-tokens are basically ERC20 tokens issued to liquidity providers in exchange for their liquidity. In fact, LP-tokens are shares:
+1. You get LP-tokens in exchange for your liquidity.
+2. The amount of tokens you get is proportional to the share of your liquidity in pool's reserves.
+3. Fees are distributed proportionally to the amount of tokens you hold.
+4. LP-tokens can be exchanged back for liquidity + accumulated fees.
+
+ how will we calculate the amount of issued LP-tokens depending on the amount of provided liquidity? This is not so obvious because there a some requirements we need to meet:
+
+
+1. Every issued share must be always correct. When someone deposits or removes liquidity after me, my share must remain correct.
+2. Write operations(eg. storing new data or updating existing data in a contract) on Ethereum are very expensive. So we'd want to reduce maintenance costs of LP-tokens (i.e. we don't want to run a scheduled job that regularly recalculates and updates shares).
+
+Imagine if we issues alot of tokens, suppose 1 billion and distribute them to all of the liquidity providers in pool. Suppose if we distribute all the tokens at first liquidity provider gets 1 Billion token, and second one gets a share of it, etc). we are forced to recalculate issued shares, which is expensive. If we distribute only a portion of the tokens initially, then we're risking hitting the supply limit,
+
+The only good solution seems to not have supply limit at all and mint new tokens when new liquidity is added. This allows infinte growth and, if we use a proper formula, all issued shares will remain correct ( will scale proportionally) wehn liqudity is added or removed. Luckily, inflation doesn't reduce value of LP-tokens because they're always backed by some amount of liquidity tht doesn't depend on the number of issued tokens.
