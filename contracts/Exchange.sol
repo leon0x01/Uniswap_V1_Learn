@@ -18,6 +18,9 @@ contract Exchange is ERC20{
         if (getReserve() == 0 ) {
             IERC20 token = IERC20(tokenAddress);
             token.transferFrom(msg.sender, address(this), _tokenAmount);
+            uint256 liquidity = address(this).balance;
+            _mint(msg.sender, liqudity);
+            return liquidity;
         }
         else {
             uint256 ethReserve = address(this).balance - msg.value;
@@ -28,6 +31,10 @@ contract Exchange is ERC20{
 
             IERC20 token = IERC20(tokenAddress);
             token.transferFrom(msg.sender, address(this), tokenAmount); 
+
+            uint256 liquidity = (totalSupply() * msg.value) / ethReserve;
+            _mint(msg.sender, liquidity);
+            return liquidity;
         }
     }
 
@@ -51,7 +58,12 @@ contract Exchange is ERC20{
         uint256 outputReserve
     ) private pure returns (uint256){
         require(inputReserve > 0 && outputReserve > 0, "invalid reserves");
-        return (inputAmount * outputReserve) / (inputReserve + inputAmount);
+        //return (inputAmount * outputReserve) / (inputReserve + inputAmount);
+        uint256 inputAmountWithFee = inputAmount * 99;
+        uint256 numerator = inputAmountWithFee * outputReserve;
+        uint256 denominator = (inputReserve * 100) + inputAmountWithFee;
+
+        return numerator / denominator;
     }
 
     function getTokenAmount(
@@ -85,4 +97,19 @@ contract Exchange is ERC20{
     require(ethBought >= _minEth, "insufficient output amount");
     IERC20(tokenAddress).transferFrom(msg.sender, address(this), _tokenSold);
     payable(msg.sender).transfer(ethBought);
+
+
+    function removeLiquidity(uint256 _amount) public returns (uint256, uin256){
+        require(_amount > 0, "invalid amount");
+
+        uint256 ethAmount = (address(this).balance * _amount) / totalSupply();
+        uint256 tokenAmount = (getReserve() * _amount) / totalSupply();
+
+        _burn(msg.sender, _amount);
+        payable(msg.sender).transfer(ethAmount);
+        IERC20(tokenAddress).transfer(msg.sender, tokenAmount);
+
+        return (ethAmount, tokenAmount);
+        
+    }
 }
