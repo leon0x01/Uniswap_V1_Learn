@@ -101,3 +101,48 @@ For example, if you deposit 1,000 units of cryptocurrency with a market value of
 
     New LP tokens = (1,000 / 10) * 100,000 = 10,000
 
+
+## Fees
+
+How to collect fees on swaps. Before that we need to answer a couple of questions:
+
+1. Do we want to take fees in ether or tokens? Do we want to pay rewards to liqudity providers in ether or tokens?
+2. How to collect a small fixed fee from each swap?
+3. How to distribute accumulated fees to liquidity providers proportionally to their contributio?
+
+This might looks a bit tedious task to do but we already have everything to solve it.
+
+Let's think about the last two questions. We might introduce an extra payment that's sent along with a swap transaction. Such payments then get accumulated in a fund from which any liquidity provider can withdraw an amount proportional to their share. 
+
+1. Traders already send ethers/tokens to the exchange contract. Instead of asking for a fee we can simply subtract it from ethers/tokens that are sent to the contract.
+
+2. We already have the fund - it's the exchange reserves! The reserves can be used to accumulated fees. This also means that reserves will grow over time, so the constant product formulat is not that constant! However, this doesn't invalidate it: the fee is small compared to reserves and there's not way to manipulate it to try to significanlty chagne reserves.
+
+3. And now we have an answer to the first question: Fees are paid in the currency of the traded in asset. Liquidity providers get a balanced amount of ethers and tokens plus a share of accumulated fees proportional to the share of their LP-tokens.
+
+That's it! Let's get to the code. 
+
+
+Uniswap takes 0.3% in fees from each swap. We'll take 1% just so that it's easier to see the difference in tests. Adding fees to the contract is as easy as adding a couple of multipliers to getAmount function
+
+
+amountwithFee = amount * (100-fee) /100
+
+## Removing liquidity 
+
+So if liquidity provider want to remove their liqudity what to do?
+
+To remove liqudity we can again use LP-tokens: we don't need to remember amounts deposited by each liquidity provider and can calculate the amount of removed liquidity based on an LP-tokens share.
+
+When liquidity is removed, it's returned in both ethers and tokens and their amounts are, of coursed, balanced. This is the moment that causes impermanent loss: the ration of reserves changes over time following changes in their prices in USD. When liquidity is removed the balance can be different from what it was when liquidity was deposited. This means that you would get different amounts of ethers and tokens and their total price might be lower than if you have just held them in wallet.
+
+As of Now we have implemented all core mechanics of Exchange contract, including pricing function, swapping, LP-tokens, and fees. We're about to implement factory contract.
+
+### What Factory is for?
+
+Basically, Factory contract serves as a registry of exchanges: every new deployed Exchange contract is registered with a Factory. And this is an important mechanic any exchange can be foun d by querying the registry. 
+
+- Factory contract can also deploy and exchange without dealing with code, nodes, deploying scripts, and any other development tools. 
+
+- Factory implements a function that allows users to creat and deploy an exchange by simply calling this function. So, toady we'll also learn How a contract can deploy another contract.
+
