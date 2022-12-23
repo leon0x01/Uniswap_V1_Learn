@@ -18,4 +18,8 @@ function createExchange(address _tokenAddress) public returns (address) {
 return address(exchange);
 
 }
+
+function getExchange(address _tokenAddress) public view returns (address) {
+    return tokenToExchange[_tokenAddress];
+}
 }
