@@ -146,3 +146,18 @@ Basically, Factory contract serves as a registry of exchanges: every new deploye
 
 - Factory implements a function that allows users to creat and deploy an exchange by simply calling this function. So, toady we'll also learn How a contract can deploy another contract.
 
+Factory checks is done for two condition:
+
+1. The first ensures that token address is not the zero address ie address(0).
+
+2. Next one ensures that the token hasn't already been added to the registry (default address value is the zero address). The idea is that we don't want to have different exchanges for the same token because we don't wawnt liquidity to be scattered across multiple to reduce slippage and provide better exchange rates.
+
+### Token-to-token swaps
+
+how do we swap a token for token when we have two exchanges linked by a registry? Maybe like that:
+
+1. Begin the standard token-to-ether swap.
+2. Instead of sending ethers to user, find an  exchange for the token address provided by user.
+3. If the exchange exists, send the ethers to the exchange to swap them to tokens.
+4. Return swapped tokens to user.
+
