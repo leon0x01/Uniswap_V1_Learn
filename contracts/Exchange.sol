@@ -10,6 +10,7 @@ contract Exchange is ERC20{
     constructor(address _token) ERC20("ChamroSwap-v1", "Chamro-v1"){
         require(_token != address(0), "invalid token address");
         tokenAddress  = _token;
+        factoryAddress = msg.sender; 
     }
 
     function addLiquidity(uint256 _tokenAmount) public payable{
