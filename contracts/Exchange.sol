@@ -126,4 +126,35 @@ contract Exchange is ERC20{
         return (ethAmount, tokenAmount);
         
     }
+
+    function tokenToTokenSwap(
+        uint256 _tokenSold,
+        uint256 _minTokenBought,
+        address _tokenAddress
+    ) public {
+        address exchangeAddress = IFactory(factoryAddress).getExchange(
+            _tokenAddress
+        );
+        require(
+            exchangeAddress != address(this) && exchangeAddress != address(0),
+            "invalid exchange address"
+        );
+
+        uint256 tokenReserve = getReserve();
+        uint256 ethBought = getAmount(
+            _tokenSold,
+            tokenReserve,
+            address(this).balance
+        );
+        IERC20(tokenAddress).transferFrom(
+            msg.sender,
+            address(this),
+            _tokensSold
+        );
+
+        IExchange(exchangeAddress).ethToTokenTransfer{value: ethBought}(
+            _minTokensBought,
+            msg.sender
+        );
+    }
 }
