@@ -14,6 +14,10 @@ interface IExchange {
     external
     payable;
 }
+
+interface IFactory {
+    function getExchange(address _tokenAddress) external returns (address);
+}
 contract Exchange is ERC20{
     address public tokenAddress;
     constructor(address _token) ERC20("ChamroSwap-v1", "Chamro-v1"){
