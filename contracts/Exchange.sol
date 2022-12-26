@@ -2,9 +2,18 @@
 
 pragma solidity ^0.8.0;
 
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 // since every exchange allows swaps with only onetoken, we need to connect
 // Exchange with a token address:
+
+interface IExchange {
+    function ethToTokenSwap(uint256 _minTokens) external payable;
+
+    function ethToTokenTransfer(uint256 _minTokens, address _recipient)
+    external;
+    payable;
+}
 contract Exchange is ERC20{
     address public tokenAddress;
     constructor(address _token) ERC20("ChamroSwap-v1", "Chamro-v1"){
